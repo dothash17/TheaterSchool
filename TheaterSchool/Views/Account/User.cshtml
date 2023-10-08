@@ -1,0 +1,55 @@
+﻿﻿@{
+    ViewData["Title"] = "User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <ul class="list-group">
+                @if (this.Context.User.IsInRole("admin"))
+                {
+                    <li class="list-group-item">
+                        <a asp-controller="PhysicalPerson" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Физическое лицо</a>
+                    </li>
+                }
+                <li class="list-group-item">
+                    <a asp-controller="Student" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Студент</a>
+                </li>
+                <li class="list-group-item">
+                    <a asp-controller="Teacher" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Преподаватель</a>
+                </li>
+                <li class="list-group-item">
+                    <a asp-controller="Performance" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Спектакль</a>
+                </li>
+                <li class="list-group-item">
+                    <a asp-controller="Subject" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Предмет</a>
+                </li>
+                <li class="list-group-item">
+                    <a asp-controller="Timetable" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Расписание занятий</a>
+                </li>
+                @if (this.Context.User.IsInRole("admin"))
+                {
+                    <li class="list-group-item">
+                        <a asp-controller="StudentPerformance" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Связь Студент-Спектакль</a>
+                    </li>                
+                    <li class="list-group-item">
+                        <a asp-controller="StudentSubject" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Связь Студент-Дисциплина</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-controller="SubjectTimetable" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Связь Дисциплина-Расписание</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-controller="TeacherPerformance" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Связь Преподаватель-Спектакль</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-controller="TeacherSubject" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Связь Преподаватель-Дисциплина</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-controller="TeacherTimetable" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Связь Преподаватель-Расписание</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

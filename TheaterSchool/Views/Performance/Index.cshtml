@@ -1,0 +1,79 @@
+﻿@model IEnumerable<TheaterSchool.Models.Performance>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    @if (this.Context.User.IsInRole("admin"))
+    {
+        <a class="btn btn-success" asp-action="Create">Create New</a>
+    }
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PerformanceName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Genre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Duration)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Requisite)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PerformanceID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PerformanceName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Genre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duration)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Requisite)
+                    </td>
+                    <td>
+                        @if (this.Context.User.IsInRole("admin"))
+                        {
+                            <a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.PerformanceID">Редактировать</a>
+                            <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.PerformanceID">Удалить</a>
+                        }
+                        <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@item.PerformanceID">Подробнее</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

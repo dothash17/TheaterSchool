@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TheaterSchool.Models.Subject>
+
+@{
+    ViewData["Title"] = "GetSubjectsByTeacher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="table-responsive">
+    @if (Model.Any())
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Название дисциплины</th>
+                    <th>Длительность</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.SubjectName</td>
+                        <td>@item.Duration</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h3>Преподаватель не преподает ни одной дисциплины.</h3>
+    }
+
+    <a asp-action="Index">Назад к списку преподавателей</a>
+</div>

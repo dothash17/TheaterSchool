@@ -1,0 +1,61 @@
+﻿@model IEnumerable<TheaterSchool.Models.Timetable>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    @if (this.Context.User.IsInRole("admin"))
+    {
+        <a class="btn btn-success" asp-action="Create">Создать новое</a>
+    }
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.TimetableID)*@ID
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DayOfTheWeek)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PeriodNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClassRoom)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TimetableID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DayOfTheWeek)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PeriodNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClassRoom)
+                    </td>
+                    <td>
+                        @if (this.Context.User.IsInRole("admin"))
+                        {
+                            <a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.TimetableID">Редактировать</a>
+                            <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.TimetableID">Удалить</a>
+                        }
+                        <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@item.TimetableID">Подробнее</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

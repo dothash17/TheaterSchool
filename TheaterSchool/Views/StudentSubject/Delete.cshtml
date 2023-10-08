@@ -1,0 +1,43 @@
+﻿@model TheaterSchool.Models.StudentSubject
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            ID студента
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StudentID)
+        </dd>
+        <dt class = "col-sm-2">
+            Фамилия студента
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Student.PhysicalPerson.LastName)
+        </dd>
+        <dt class = "col-sm-2">
+            ID дисциплины
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SubjectID)
+        </dd>
+        <dt class = "col-sm-2">
+            Название дисциплины
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Subject.SubjectName)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="StudentID" />
+        <input type="hidden" asp-for="SubjectID" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

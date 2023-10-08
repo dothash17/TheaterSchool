@@ -1,0 +1,31 @@
+﻿@model TheaterSchool.Models.Subject
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SubjectName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SubjectName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Duration)
+        </dd>
+    </dl>
+</div>
+<div>
+    @if (this.Context.User.IsInRole("admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.SubjectID">Edit</a>
+    }
+    <a asp-action="Index">Back to List</a>
+</div>

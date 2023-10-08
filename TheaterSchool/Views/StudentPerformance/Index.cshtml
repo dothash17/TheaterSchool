@@ -1,0 +1,50 @@
+﻿@model IEnumerable<TheaterSchool.Models.StudentPerformance>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    <a class="btn btn-success" asp-action="Create">Создать новое</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID студента
+            </th>
+            <th>
+                Фамилия студента
+            </th>
+            <th>
+                ID спектакля
+            </th>
+            <th>
+                Название спектакля
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.PhysicalPersonID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.PhysicalPerson.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Performance.PerformanceID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Performance.PerformanceName)
+            </td>
+            <td>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-studentId="@item.StudentID" asp-route-performanceId="@item.PerformanceID">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

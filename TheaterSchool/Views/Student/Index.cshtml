@@ -1,0 +1,177 @@
+﻿@model IEnumerable<TheaterSchool.Models.Student>
+@using Microsoft.AspNetCore.Http.Extensions
+@{
+    var queryString = ViewContext.HttpContext.Request.Query;
+    var searchString = queryString["searchString"].ToString();
+    var courseFilter = queryString["courseFilter"].ToString();
+    var isMale = queryString["isMale"].ToString() == "true";
+    var isFemale = queryString["isFemale"].ToString() == "true";
+}
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    @if (this.Context.User.IsInRole("admin"))
+    {
+        <a class="btn btn-success" asp-action="Create">Создать новое</a>
+    }
+</p>
+<style>
+    .narrow-form {
+        width: 50%;
+    }
+</style>
+
+@if (!string.IsNullOrWhiteSpace(searchString))
+{
+    <p>Текущий фильтр: <strong>Поиск - @searchString</strong></p>
+}
+
+@if (!string.IsNullOrWhiteSpace(courseFilter))
+{
+    <p>Текущий фильтр: <strong>Курс - @courseFilter</strong></p>
+}
+
+@if (isMale || isFemale)
+{
+    <p>Текущий фильтр: <strong>Пол - @(isMale ? "Мужской" : "Женский")</strong></p>
+}
+
+<form asp-action="Search" method="post">
+    <div class="mb-2 form-group narrow-form">
+        <label for="searchString">Поиск:</label>
+        <input type="text" class="form-control" name="searchString" placeholder="Введите текст для поиска">
+    </div>
+    <div class="mb-2 form-group narrow-form">
+        <label for="courseFilter">Фильтр по курсу:</label>
+        <select class="form-control" name="courseFilter" id="courseFilter">
+            <option value="">Все курсы</option>
+            <option value="1">Курс 1</option>
+            <option value="2">Курс 2</option>
+            <option value="3">Курс 3</option>
+            <option value="4">Курс 4</option>
+        </select>
+    </div>
+    <div class="mb-2 form-group narrow-form">
+        <label>Фильтр по полу:</label><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="isMale" value="true" id="maleCheckbox">
+            <label class="form-check-label" for="maleCheckbox">Мужской</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="isFemale" value="true" id="femaleCheckbox">
+            <label class="form-check-label" for="femaleCheckbox">Женский</label>
+        </div>
+    </div>
+    <script>
+        const maleCheckbox = document.getElementById("maleCheckbox");
+        const femaleCheckbox = document.getElementById("femaleCheckbox");
+
+        maleCheckbox.addEventListener("change", function () {
+            if (maleCheckbox.checked) {
+                femaleCheckbox.checked = false;
+            }
+        });
+
+        femaleCheckbox.addEventListener("change", function () {
+            if (femaleCheckbox.checked) {
+                maleCheckbox.checked = false;
+            }
+        });
+    </script>
+    <button type="submit" class="mb-2 btn btn-primary">Поиск</button>
+    <a href="@Url.Action("Index")" class="mb-2 btn btn-secondary">Сбросить</a>
+</form>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhysicalPerson.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhysicalPerson.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhysicalPerson.SecondName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhysicalPerson.DateOfBirth)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhysicalPerson.Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhysicalPerson.Sex)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhysicalPerson.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Course)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Group)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhysicalPerson.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhysicalPerson.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhysicalPerson.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhysicalPerson.SecondName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhysicalPerson.DateOfBirth)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhysicalPerson.Phone)
+                    </td>
+                    <td>
+                        @if (item.PhysicalPerson.Sex == true)
+                        {
+                            <label>Мужской</label>
+                        }
+                        else
+                        {
+                            <label>Женский</label>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhysicalPerson.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Group)
+                    </td>
+                    <td>
+                        @if (this.Context.User.IsInRole("admin"))
+                        {
+                            <a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.PhysicalPersonID">Редактировать</a>
+                            <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.PhysicalPersonID">Удалить</a>
+                        }
+                        <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@item.PhysicalPersonID">Подробнее</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
