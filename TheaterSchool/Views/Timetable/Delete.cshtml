@@ -1,7 +1,7 @@
 ﻿@model TheaterSchool.Models.Timetable
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -26,12 +26,18 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ClassRoom)
         </dd>
+        <dt class="col-sm-2">
+            Идентификатор преподавателя
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TeacherID)
+        </dd>
     </dl>
 </div>
 <div>
-    @if (this.Context.User.IsInRole("admin"))
-    {
-        <a asp-action="Edit" asp-route-id="@Model?.TimetableID">Edit</a>
-    }
-    <a asp-action="Index">Back to List</a>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="TimetableID" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
 </div>

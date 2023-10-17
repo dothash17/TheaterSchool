@@ -124,7 +124,7 @@ namespace TheaterSchool.Controllers
             {
                 return NotFound();
             }
-            ViewData["PhysicalPersonID"] = new SelectList(_context.PhysicalPersons, "ID", "Address", teacher.PhysicalPersonID);
+            ViewData["PhysicalPersonID"] = new SelectList(_context.PhysicalPersons, "ID", "ID", teacher.PhysicalPersonID);
             return View(teacher);
         }
 

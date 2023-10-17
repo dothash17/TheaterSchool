@@ -16,7 +16,8 @@ public partial class Timetable
     [DisplayName("Аудитория")]
     public int ClassRoom { get; set; }
 
-    public virtual ICollection<SubjectTimetable> SubjectTimetable { get; set; } = new List<SubjectTimetable>();
+    public int TeacherID { get; set; }
 
-    public virtual ICollection<TeacherTimetable> TeacherTimetable { get; set; } = new List<TeacherTimetable>();
+    public virtual ICollection<SubjectTimetable> SubjectTimetable { get; set; } = new List<SubjectTimetable>();
+    public virtual Teacher Teacher { get; set; }
 }

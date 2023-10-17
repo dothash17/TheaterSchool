@@ -61,7 +61,7 @@ namespace TheaterSchool.Migrations
 
                     b.HasIndex(new[] { "PerformanceID" }, "IX_PerformanceID");
 
-                    b.ToTable("Performance", (string)null);
+                    b.ToTable("Performance");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.PhysicalPersons", b =>
@@ -104,7 +104,7 @@ namespace TheaterSchool.Migrations
 
                     b.HasIndex(new[] { "ID" }, "IX_PhysicalPersonID");
 
-                    b.ToTable("PhysicalPersons", (string)null);
+                    b.ToTable("PhysicalPersons");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.Student", b =>
@@ -124,7 +124,7 @@ namespace TheaterSchool.Migrations
 
                     b.HasIndex(new[] { "PhysicalPersonID" }, "IX_Student_PhysicalPersonID");
 
-                    b.ToTable("Student", (string)null);
+                    b.ToTable("Student");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.StudentPerformance", b =>
@@ -139,7 +139,7 @@ namespace TheaterSchool.Migrations
 
                     b.HasIndex(new[] { "PerformanceID" }, "IX_StudentPerformance_PerformanceID");
 
-                    b.ToTable("StudentPerformance", (string)null);
+                    b.ToTable("StudentPerformance");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.StudentSubject", b =>
@@ -154,7 +154,7 @@ namespace TheaterSchool.Migrations
 
                     b.HasIndex(new[] { "SubjectID" }, "IX_StudentSubject_SubjectID");
 
-                    b.ToTable("StudentSubject", (string)null);
+                    b.ToTable("StudentSubject");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.Subject", b =>
@@ -177,7 +177,7 @@ namespace TheaterSchool.Migrations
 
                     b.HasIndex(new[] { "SubjectID" }, "IX_SubjectID");
 
-                    b.ToTable("Subject", (string)null);
+                    b.ToTable("Subject");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.SubjectTimetable", b =>
@@ -192,7 +192,7 @@ namespace TheaterSchool.Migrations
 
                     b.HasIndex(new[] { "TimetableID" }, "IX_SubjectTimetable_TimetableID");
 
-                    b.ToTable("SubjectTimetable", (string)null);
+                    b.ToTable("SubjectTimetable");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.Teacher", b =>
@@ -214,7 +214,7 @@ namespace TheaterSchool.Migrations
 
                     b.HasIndex(new[] { "PhysicalPersonID" }, "IX_Teacher_PhysicalPersonID");
 
-                    b.ToTable("Teacher", (string)null);
+                    b.ToTable("Teacher");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.TeacherPerformance", b =>
@@ -229,7 +229,7 @@ namespace TheaterSchool.Migrations
 
                     b.HasIndex(new[] { "PerformanceID" }, "IX_TeacherPerformance_PerformanceID");
 
-                    b.ToTable("TeacherPerformance", (string)null);
+                    b.ToTable("TeacherPerformance");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.TeacherSubject", b =>
@@ -244,22 +244,7 @@ namespace TheaterSchool.Migrations
 
                     b.HasIndex(new[] { "SubjectID" }, "IX_TeacherSubject_SubjectID");
 
-                    b.ToTable("TeacherSubject", (string)null);
-                });
-
-            modelBuilder.Entity("TheaterSchool.Models.TeacherTimetable", b =>
-                {
-                    b.Property<int>("TeacherID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TimetableID")
-                        .HasColumnType("int");
-
-                    b.HasKey("TeacherID", "TimetableID");
-
-                    b.HasIndex(new[] { "TimetableID" }, "IX_TeacherTimetable_TimetableID");
-
-                    b.ToTable("TeacherTimetable", (string)null);
+                    b.ToTable("TeacherSubject");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.Timetable", b =>
@@ -281,11 +266,16 @@ namespace TheaterSchool.Migrations
                     b.Property<int>("PeriodNumber")
                         .HasColumnType("int");
 
+                    b.Property<int>("TeacherID")
+                        .HasColumnType("int");
+
                     b.HasKey("TimetableID");
+
+                    b.HasIndex("TeacherID");
 
                     b.HasIndex(new[] { "TimetableID" }, "IX_TimetableID");
 
-                    b.ToTable("Timetable", (string)null);
+                    b.ToTable("Timetable");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.Student", b =>
@@ -407,23 +397,16 @@ namespace TheaterSchool.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("TheaterSchool.Models.TeacherTimetable", b =>
+            modelBuilder.Entity("TheaterSchool.Models.Timetable", b =>
                 {
                     b.HasOne("TheaterSchool.Models.Teacher", "Teacher")
-                        .WithMany("TeacherTimetable")
+                        .WithMany("Timetable")
                         .HasForeignKey("TeacherID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_TeacherTimetable_Teacher");
-
-                    b.HasOne("TheaterSchool.Models.Timetable", "Timetable")
-                        .WithMany("TeacherTimetable")
-                        .HasForeignKey("TimetableID")
-                        .IsRequired()
-                        .HasConstraintName("FK_TeacherTimetable_Timetable");
+                        .HasConstraintName("FK_Timetable_Teacher");
 
                     b.Navigation("Teacher");
-
-                    b.Navigation("Timetable");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.Performance", b =>
@@ -464,14 +447,12 @@ namespace TheaterSchool.Migrations
 
                     b.Navigation("TeacherSubject");
 
-                    b.Navigation("TeacherTimetable");
+                    b.Navigation("Timetable");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.Timetable", b =>
                 {
                     b.Navigation("SubjectTimetable");
-
-                    b.Navigation("TeacherTimetable");
                 });
 #pragma warning restore 612, 618
         }

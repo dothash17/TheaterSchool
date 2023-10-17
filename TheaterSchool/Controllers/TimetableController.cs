@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheaterSchool.Models;
 using TheaterSchool.Models.Data;
@@ -18,9 +19,8 @@ namespace TheaterSchool.Controllers
         // GET: Timetable
         public async Task<IActionResult> Index()
         {
-              return _context.Timetable != null ? 
-                          View(await _context.Timetable.ToListAsync()) :
-                          Problem("Entity set 'TheaterSchoolDBContext.Timetable'  is null.");
+            var theaterSchoolDBContext = _context.Timetable.Include(s => s.Teacher);
+            return View(await theaterSchoolDBContext.ToListAsync());
         }
 
         // GET: Timetable/Details/5
@@ -45,6 +45,7 @@ namespace TheaterSchool.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
+            ViewData["TeacherID"] = new SelectList(_context.Teacher, "PhysicalPersonID", "PhysicalPersonID");
             return View();
         }
 
@@ -54,7 +55,7 @@ namespace TheaterSchool.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Create([Bind("TimetableID,DayOfTheWeek,PeriodNumber,ClassRoom")] Timetable timetable)
+        public async Task<IActionResult> Create([Bind("TimetableID,DayOfTheWeek,PeriodNumber,ClassRoom, TeacherID")] Timetable timetable)
         {
             try
             {
@@ -88,7 +89,7 @@ namespace TheaterSchool.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("TimetableID,DayOfTheWeek,PeriodNumber,ClassRoom")] Timetable timetable)
+        public async Task<IActionResult> Edit(int id, [Bind("TimetableID,DayOfTheWeek,PeriodNumber,ClassRoom, TeacherID")] Timetable timetable)
         {
             if (id != timetable.TimetableID)
             {

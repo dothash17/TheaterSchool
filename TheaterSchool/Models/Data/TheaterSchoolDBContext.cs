@@ -11,8 +11,7 @@ public partial class TheaterSchoolDBContext : DbContext
     {
     }
 
-    public TheaterSchoolDBContext(DbContextOptions<TheaterSchoolDBContext> options)
-        : base(options)
+    public TheaterSchoolDBContext(DbContextOptions<TheaterSchoolDBContext> options) : base(options)
     {
     }
 
@@ -36,12 +35,10 @@ public partial class TheaterSchoolDBContext : DbContext
 
     public virtual DbSet<TeacherSubject> TeacherSubject { get; set; }
 
-    public virtual DbSet<TeacherTimetable> TeacherTimetable { get; set; }
-
     public virtual DbSet<Timetable> Timetable { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-HI86PTN\\SQLEXPRESS;Database=TheaterSchoolDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False", 
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-HI86PTN\\SQLEXPRESS;Database=TheaterSchoolDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False",
             x => x.UseDateOnlyTimeOnly());
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -216,23 +213,6 @@ public partial class TheaterSchoolDBContext : DbContext
                 .HasConstraintName("FK_TeacherSubject_Teacher");
         });
 
-        modelBuilder.Entity<TeacherTimetable>(entity =>
-        {
-            entity.HasKey(e => new { e.TeacherID, e.TimetableID });
-
-            entity.HasIndex(e => e.TimetableID, "IX_TeacherTimetable_TimetableID");
-
-            entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherTimetable)
-                .HasForeignKey(d => d.TeacherID)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_TeacherTimetable_Teacher");
-
-            entity.HasOne(d => d.Timetable).WithMany(p => p.TeacherTimetable)
-                .HasForeignKey(d => d.TimetableID)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_TeacherTimetable_Timetable");
-        });
-
         modelBuilder.Entity<Timetable>(entity =>
         {
             entity.HasIndex(e => e.TimetableID, "IX_TimetableID");
@@ -240,6 +220,10 @@ public partial class TheaterSchoolDBContext : DbContext
             entity.Property(e => e.DayOfTheWeek)
                 .IsRequired()
                 .HasMaxLength(11);
+
+            entity.HasOne(d => d.Teacher).WithMany(p => p.Timetable)
+                .HasForeignKey(d => d.TeacherID)
+                .HasConstraintName("FK_Timetable_Teacher");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -27,6 +27,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.ClassRoom)
                 </th>
+                <th>
+                    Идентификатор преподавателя
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -45,6 +48,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ClassRoom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TeacherID)
                     </td>
                     <td>
                         @if (this.Context.User.IsInRole("admin"))

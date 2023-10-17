@@ -62,21 +62,6 @@ namespace TheaterSchool.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Timetable",
-                columns: table => new
-                {
-                    TimetableID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DayOfTheWeek = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
-                    PeriodNumber = table.Column<int>(type: "int", nullable: false),
-                    ClassRoom = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Timetable", x => x.TimetableID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Student",
                 columns: table => new
                 {
@@ -112,28 +97,6 @@ namespace TheaterSchool.Migrations
                         principalTable: "PhysicalPersons",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SubjectTimetable",
-                columns: table => new
-                {
-                    SubjectID = table.Column<int>(type: "int", nullable: false),
-                    TimetableID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubjectTimetable", x => new { x.SubjectID, x.TimetableID });
-                    table.ForeignKey(
-                        name: "FK_SubjectTimetable_Subject",
-                        column: x => x.SubjectID,
-                        principalTable: "Subject",
-                        principalColumn: "SubjectID");
-                    table.ForeignKey(
-                        name: "FK_SubjectTimetable_Timetable",
-                        column: x => x.TimetableID,
-                        principalTable: "Timetable",
-                        principalColumn: "TimetableID");
                 });
 
             migrationBuilder.CreateTable(
@@ -225,22 +188,44 @@ namespace TheaterSchool.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeacherTimetable",
+                name: "Timetable",
                 columns: table => new
                 {
-                    TeacherID = table.Column<int>(type: "int", nullable: false),
+                    TimetableID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DayOfTheWeek = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    PeriodNumber = table.Column<int>(type: "int", nullable: false),
+                    ClassRoom = table.Column<int>(type: "int", nullable: false),
+                    TeacherID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Timetable", x => x.TimetableID);
+                    table.ForeignKey(
+                        name: "FK_Timetable_Teacher",
+                        column: x => x.TeacherID,
+                        principalTable: "Teacher",
+                        principalColumn: "PhysicalPersonID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubjectTimetable",
+                columns: table => new
+                {
+                    SubjectID = table.Column<int>(type: "int", nullable: false),
                     TimetableID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeacherTimetable", x => new { x.TeacherID, x.TimetableID });
+                    table.PrimaryKey("PK_SubjectTimetable", x => new { x.SubjectID, x.TimetableID });
                     table.ForeignKey(
-                        name: "FK_TeacherTimetable_Teacher",
-                        column: x => x.TeacherID,
-                        principalTable: "Teacher",
-                        principalColumn: "PhysicalPersonID");
+                        name: "FK_SubjectTimetable_Subject",
+                        column: x => x.SubjectID,
+                        principalTable: "Subject",
+                        principalColumn: "SubjectID");
                     table.ForeignKey(
-                        name: "FK_TeacherTimetable_Timetable",
+                        name: "FK_SubjectTimetable_Timetable",
                         column: x => x.TimetableID,
                         principalTable: "Timetable",
                         principalColumn: "TimetableID");
@@ -297,9 +282,9 @@ namespace TheaterSchool.Migrations
                 column: "SubjectID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherTimetable_TimetableID",
-                table: "TeacherTimetable",
-                column: "TimetableID");
+                name: "IX_Timetable_TeacherID",
+                table: "Timetable",
+                column: "TeacherID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TimetableID",
@@ -326,10 +311,10 @@ namespace TheaterSchool.Migrations
                 name: "TeacherSubject");
 
             migrationBuilder.DropTable(
-                name: "TeacherTimetable");
+                name: "Student");
 
             migrationBuilder.DropTable(
-                name: "Student");
+                name: "Timetable");
 
             migrationBuilder.DropTable(
                 name: "Performance");
@@ -339,9 +324,6 @@ namespace TheaterSchool.Migrations
 
             migrationBuilder.DropTable(
                 name: "Teacher");
-
-            migrationBuilder.DropTable(
-                name: "Timetable");
 
             migrationBuilder.DropTable(
                 name: "PhysicalPersons");

@@ -12,7 +12,7 @@ using TheaterSchool.Models.Data;
 namespace TheaterSchool.Migrations
 {
     [DbContext(typeof(TheaterSchoolDBContext))]
-    [Migration("20231004142249_InitialMigration")]
+    [Migration("20231017123954_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -250,21 +250,6 @@ namespace TheaterSchool.Migrations
                     b.ToTable("TeacherSubject");
                 });
 
-            modelBuilder.Entity("TheaterSchool.Models.TeacherTimetable", b =>
-                {
-                    b.Property<int>("TeacherID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TimetableID")
-                        .HasColumnType("int");
-
-                    b.HasKey("TeacherID", "TimetableID");
-
-                    b.HasIndex(new[] { "TimetableID" }, "IX_TeacherTimetable_TimetableID");
-
-                    b.ToTable("TeacherTimetable");
-                });
-
             modelBuilder.Entity("TheaterSchool.Models.Timetable", b =>
                 {
                     b.Property<int>("TimetableID")
@@ -284,7 +269,12 @@ namespace TheaterSchool.Migrations
                     b.Property<int>("PeriodNumber")
                         .HasColumnType("int");
 
+                    b.Property<int>("TeacherID")
+                        .HasColumnType("int");
+
                     b.HasKey("TimetableID");
+
+                    b.HasIndex("TeacherID");
 
                     b.HasIndex(new[] { "TimetableID" }, "IX_TimetableID");
 
@@ -410,23 +400,16 @@ namespace TheaterSchool.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("TheaterSchool.Models.TeacherTimetable", b =>
+            modelBuilder.Entity("TheaterSchool.Models.Timetable", b =>
                 {
                     b.HasOne("TheaterSchool.Models.Teacher", "Teacher")
-                        .WithMany("TeacherTimetable")
+                        .WithMany("Timetable")
                         .HasForeignKey("TeacherID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_TeacherTimetable_Teacher");
-
-                    b.HasOne("TheaterSchool.Models.Timetable", "Timetable")
-                        .WithMany("TeacherTimetable")
-                        .HasForeignKey("TimetableID")
-                        .IsRequired()
-                        .HasConstraintName("FK_TeacherTimetable_Timetable");
+                        .HasConstraintName("FK_Timetable_Teacher");
 
                     b.Navigation("Teacher");
-
-                    b.Navigation("Timetable");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.Performance", b =>
@@ -467,14 +450,12 @@ namespace TheaterSchool.Migrations
 
                     b.Navigation("TeacherSubject");
 
-                    b.Navigation("TeacherTimetable");
+                    b.Navigation("Timetable");
                 });
 
             modelBuilder.Entity("TheaterSchool.Models.Timetable", b =>
                 {
                     b.Navigation("SubjectTimetable");
-
-                    b.Navigation("TeacherTimetable");
                 });
 #pragma warning restore 612, 618
         }
