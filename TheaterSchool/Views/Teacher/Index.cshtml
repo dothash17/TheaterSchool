@@ -153,7 +153,12 @@
                             <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.PhysicalPersonID">Удалить</a>
                         }
                         <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@item.PhysicalPersonID">Подробнее</a>
-                        <a class="btn btn-primary btn-sm" href="@Url.Action("GetSubjectsByTeacher", "Teacher", new { teacherId = item.PhysicalPersonID })">Показать дисциплины</a>
+                        @foreach (var teacher in Model)
+                        {
+                            <div>
+                                <a class="btn btn-primary btn-sm" asp-action="GetTeacherInfo" asp-route-id="@teacher.PhysicalPersonID">Показать информацию</a>
+                            </div>
+                        }
                     </td>
                 </tr>
             }

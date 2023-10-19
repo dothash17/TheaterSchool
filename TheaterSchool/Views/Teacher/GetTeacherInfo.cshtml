@@ -1,0 +1,68 @@
+﻿@model TheaterSchool.Models.TeacherInfo
+
+@{
+    ViewData["Title"] = "GetTeacherInfo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Информация о преподавателе</h2>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Должность</th>
+        </tr>
+        <tr>
+            <td>@Model.Teacher.PhysicalPerson.LastName</td>
+            <td>@Model.Teacher.PhysicalPerson.FirstName</td>
+            <td>@Model.Teacher.Position</td>
+        </tr>
+    </table>
+
+    <h4>Расписание</h4>
+    <table class="table table-bordered">
+        <tr>
+            <th>День недели</th>
+            <th>Номер пары</th>
+            <th>Аудитория</th>
+        </tr>
+        @foreach (var timetable in Model.Timetables)
+        {
+            <tr>
+                <td>@timetable.DayOfTheWeek</td>
+                <td>@timetable.PeriodNumber</td>
+                <td>@timetable.ClassRoom</td>
+            </tr>
+        }
+    </table>
+
+    <h4>Дисциплины</h4>
+    <table class="table table-bordered">
+        <tr>
+            <th>Название дисциплины</th>
+        </tr>
+        @foreach (var subject in Model.Subjects)
+        {
+            <tr>
+                <td>@subject.SubjectName</td>
+            </tr>
+        }
+    </table>
+
+    <h2>Спектакли</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>Название спектакля</th>
+        </tr>
+        @foreach (var performance in Model.Performances)
+        {
+            <tr>
+                <td>@performance.PerformanceName</td>
+            </tr>
+        }
+    </table>
+
+    <a asp-action="Index" class="btn btn-primary">Назад к списку преподавателей</a>
+</div>

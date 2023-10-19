@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using TheaterSchool.Models;
 using TheaterSchool.Models.Data;
 
@@ -58,12 +59,118 @@ namespace TheaterSchool.Controllers
             return View("Index", appDbContext);
         }
 
-        public IActionResult GetSubjectsByTeacher(int teacherId)
+        /*public IActionResult GetTeacherInfo(int teacherId)
         {
-            var teacherIdParameter = new SqlParameter("@TeacherId", teacherId);
-            var subjects = _context.Subject.FromSqlRaw("EXEC GetSubjectsByTeacher @TeacherId", teacherIdParameter).ToList();
+            var teacherIdParameter = new SqlParameter("@TeacherID", teacherId);
 
-            return View(subjects);
+            var teacherInfo = new TeacherInfo
+            {
+                Teacher = _context.Teacher
+                    .FromSqlRaw("EXEC GetTeacherInfo @TeacherID", teacherIdParameter)
+                    .AsEnumerable()
+                    .FirstOrDefault(),
+                Timetables = _context.Timetable
+                    .FromSqlRaw("EXEC GetTeacherInfo @TeacherID", teacherIdParameter)
+                    .AsEnumerable()
+                    .ToList(),
+                Subjects = _context.Subject
+                    .FromSqlRaw("EXEC GetTeacherInfo @TeacherID", teacherIdParameter)
+                    .AsEnumerable()
+                    .ToList(),
+                Performances = _context.Performance
+                    .FromSqlRaw("EXEC GetTeacherInfo @TeacherID", teacherIdParameter)
+                    .AsEnumerable()
+                    .ToList()
+            };
+
+            return View(teacherInfo);
+        }*/
+
+        public async Task<IActionResult> GetTeacherInfo(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            using (var connection = _context.Database.GetDbConnection() as SqlConnection)
+            {
+                if (connection != null)
+                {
+                    await connection.OpenAsync();
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "GetTeacherInfo";
+
+                        // Создайте параметр для передачи ID преподавателя в процедуру
+                        var teacherIdParam = new SqlParameter("@TeacherID", id);
+                        command.Parameters.Add(teacherIdParam);
+
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                var teacherInfo = new TeacherInfo
+                                {
+                                    Teacher = new Teacher
+                                    {
+                                        PhysicalPerson = new PhysicalPersons
+                                        {
+                                            LastName = reader.GetString(0),
+                                            FirstName = reader.GetString(1)
+                                        },
+                                        Position = reader.GetString(2)
+                                    },
+                                    Timetables = new List<Timetable>(),
+                                    Subjects = new List<Subject>(),
+                                    Performances = new List<Performance>()
+                                };
+
+                                await reader.NextResultAsync(); // Перейти к следующему набору результатов (расписанию)
+
+                                while (await reader.ReadAsync())
+                                {
+                                    var timetable = new Timetable
+                                    {
+                                        DayOfTheWeek = reader.GetString(0),
+                                        PeriodNumber = reader.GetInt32(1),
+                                        ClassRoom = reader.GetInt32(2)
+                                    };
+                                    teacherInfo.Timetables.Add(timetable);
+                                }
+
+                                await reader.NextResultAsync(); // Перейти к следующему набору результатов (предметам)
+
+                                while (await reader.ReadAsync())
+                                {
+                                    var subject = new Subject
+                                    {
+                                        SubjectName = reader.GetString(0)
+                                    };
+                                    teacherInfo.Subjects.Add(subject);
+                                }
+
+                                await reader.NextResultAsync(); // Перейти к следующему набору результатов (постановкам)
+
+                                while (await reader.ReadAsync())
+                                {
+                                    var performance = new Performance
+                                    {
+                                        PerformanceName = reader.GetString(0)
+                                    };
+                                    teacherInfo.Performances.Add(performance);
+                                }
+
+                                return View(teacherInfo);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return NotFound();
         }
 
         // GET: Teacher/Details/5
