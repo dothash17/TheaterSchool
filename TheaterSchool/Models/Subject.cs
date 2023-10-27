@@ -15,7 +15,7 @@ public partial class Subject
 
     public virtual ICollection<StudentSubject> StudentSubject { get; set; } = new List<StudentSubject>();
 
-    public virtual ICollection<SubjectTimetable> SubjectTimetable { get; set; } = new List<SubjectTimetable>();
+    public virtual ICollection<Lesson> Lesson { get; set; } = new List<Lesson>();
 
     public virtual ICollection<TeacherSubject> TeacherSubject { get; set; } = new List<TeacherSubject>();
 }

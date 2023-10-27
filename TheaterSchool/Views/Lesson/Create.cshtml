@@ -1,16 +1,15 @@
-﻿@model TheaterSchool.Models.Timetable
+﻿@model TheaterSchool.Models.Lesson
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="TimetableID" />
             <div class="form-group">
                 <label asp-for="DayOfTheWeek" class="control-label"></label>
                 <input asp-for="DayOfTheWeek" class="form-control" />
@@ -28,11 +27,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="TeacherID" class="control-label"></label>
-                <input asp-for="TeacherID" class="form-control" />
-                <span asp-validation-for="TeacherID" class="text-danger"></span>
+                <select asp-for="TeacherID" class="form-control" asp-items="ViewBag.TeacherID"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="SubjectID" class="control-label"></label>
+                <select asp-for="SubjectID" class="form-control" asp-items="ViewBag.SubjectID"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>

@@ -26,7 +26,7 @@
                     <a asp-controller="Subject" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Предмет</a>
                 </li>
                 <li class="list-group-item">
-                    <a asp-controller="Timetable" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Расписание занятий</a>
+                    <a asp-controller="Lesson" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Занятие</a>
                 </li>
                 @if (this.Context.User.IsInRole("admin"))
                 {
@@ -35,9 +35,6 @@
                     </li>                
                     <li class="list-group-item">
                         <a asp-controller="StudentSubject" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Связь Студент-Дисциплина</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a asp-controller="SubjectTimetable" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Связь Дисциплина-Расписание</a>
                     </li>
                     <li class="list-group-item">
                         <a asp-controller="TeacherPerformance" asp-action="Index" class="btn btn-outline-secondary btn-block rounded-pill shadow-sm">Связь Преподаватель-Спектакль</a>

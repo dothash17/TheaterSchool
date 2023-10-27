@@ -2,10 +2,10 @@
 
 namespace TheaterSchool.Models;
 
-public partial class Timetable
+public partial class Lesson
 {
-    [DisplayName("Идентификатор расписания")]
-    public int TimetableID { get; set; }
+    [DisplayName("Идентификатор занятия")]
+    public int LessonID { get; set; }
 
     [DisplayName("День недели")]
     public string DayOfTheWeek { get; set; }
@@ -17,7 +17,8 @@ public partial class Timetable
     public int ClassRoom { get; set; }
 
     public int TeacherID { get; set; }
+    public int SubjectID { get; set; }
 
-    public virtual ICollection<SubjectTimetable> SubjectTimetable { get; set; } = new List<SubjectTimetable>();
+    public virtual Subject Subject { get; set; }
     public virtual Teacher Teacher { get; set; }
 }

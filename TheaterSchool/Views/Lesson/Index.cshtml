@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TheaterSchool.Models.Timetable>
+﻿@model IEnumerable<TheaterSchool.Models.Lesson>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,7 +16,7 @@
         <thead>
             <tr>
                 <th>
-                    @*@Html.DisplayNameFor(model => model.TimetableID)*@ID
+                    ID
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.DayOfTheWeek)
@@ -30,6 +30,9 @@
                 <th>
                     Идентификатор преподавателя
                 </th>
+                <th>
+                    Идентификатор дисциплины
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -38,7 +41,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TimetableID)
+                        @Html.DisplayFor(modelItem => item.LessonID)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.DayOfTheWeek)
@@ -55,10 +58,10 @@
                     <td>
                         @if (this.Context.User.IsInRole("admin"))
                         {
-                            <a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.TimetableID">Редактировать</a>
-                            <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.TimetableID">Удалить</a>
+                            <a class="btn btn-success btn-sm" asp-action="Edit" asp-route-id="@item.LessonID">Редактировать</a>
+                            <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.LessonID">Удалить</a>
                         }
-                        <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@item.TimetableID">Подробнее</a>
+                        <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@item.LessonID">Подробнее</a>
                     </td>
                 </tr>
             }
