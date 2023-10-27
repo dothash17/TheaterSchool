@@ -59,33 +59,6 @@ namespace TheaterSchool.Controllers
             return View("Index", appDbContext);
         }
 
-        /*public IActionResult GetTeacherInfo(int teacherId)
-        {
-            var teacherIdParameter = new SqlParameter("@TeacherID", teacherId);
-
-            var teacherInfo = new TeacherInfo
-            {
-                Teacher = _context.Teacher
-                    .FromSqlRaw("EXEC GetTeacherInfo @TeacherID", teacherIdParameter)
-                    .AsEnumerable()
-                    .FirstOrDefault(),
-                Timetables = _context.Timetable
-                    .FromSqlRaw("EXEC GetTeacherInfo @TeacherID", teacherIdParameter)
-                    .AsEnumerable()
-                    .ToList(),
-                Subjects = _context.Subject
-                    .FromSqlRaw("EXEC GetTeacherInfo @TeacherID", teacherIdParameter)
-                    .AsEnumerable()
-                    .ToList(),
-                Performances = _context.Performance
-                    .FromSqlRaw("EXEC GetTeacherInfo @TeacherID", teacherIdParameter)
-                    .AsEnumerable()
-                    .ToList()
-            };
-
-            return View(teacherInfo);
-        }*/
-
         public async Task<IActionResult> GetTeacherInfo(int? id)
         {
             if (id == null)
