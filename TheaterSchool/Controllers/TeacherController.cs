@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Xml;
 using TheaterSchool.Models;
 using TheaterSchool.Models.Data;
 
@@ -57,6 +58,92 @@ namespace TheaterSchool.Controllers
             var appDbContext = await query.ToListAsync();
 
             return View("Index", appDbContext);
+        }
+
+        public async Task<IActionResult> GetTeacherInfo(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            using (var connection = _context.Database.GetDbConnection() as SqlConnection)
+            {
+                if (connection != null)
+                {
+                    await connection.OpenAsync();
+
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "GetTeacherInfo";
+
+                        var teacherIdParam = new SqlParameter("@TeacherID", id);
+                        command.Parameters.Add(teacherIdParam);
+
+                        using (var reader = await command.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                var teacherInfo = new TeacherInfo
+                                {
+                                    Teacher = new Teacher
+                                    {
+                                        PhysicalPerson = new PhysicalPersons
+                                        {
+                                            LastName = reader.GetString(0),
+                                            FirstName = reader.GetString(1)
+                                        },
+                                        Position = reader.GetString(2)
+                                    },
+                                    Lessons = new List<Lesson>(),
+                                    Subjects = new List<Subject>(),
+                                    Performances = new List<Performance>()
+                                };
+
+                                await reader.NextResultAsync();
+
+                                while (await reader.ReadAsync())
+                                {
+                                    var lesson = new Lesson
+                                    {
+                                        DayOfTheWeek = reader.GetString(0),
+                                        PeriodNumber = reader.GetInt32(1),
+                                        ClassRoom = reader.GetInt32(2)
+                                    };
+                                    teacherInfo.Lessons.Add(lesson);
+                                }
+
+                                await reader.NextResultAsync();
+
+                                while (await reader.ReadAsync())
+                                {
+                                    var subject = new Subject
+                                    {
+                                        SubjectName = reader.GetString(0)
+                                    };
+                                    teacherInfo.Subjects.Add(subject);
+                                }
+
+                                await reader.NextResultAsync();
+
+                                while (await reader.ReadAsync())
+                                {
+                                    var performance = new Performance
+                                    {
+                                        PerformanceName = reader.GetString(0)
+                                    };
+                                    teacherInfo.Performances.Add(performance);
+                                }
+
+                                return View(teacherInfo);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return NotFound();
         }
 
         // GET: Teacher/Details/5

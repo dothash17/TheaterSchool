@@ -21,19 +21,19 @@
         </tr>
     </table>
 
-    <h4>Расписание</h4>
+    <h4>Занятие</h4>
     <table class="table table-bordered">
         <tr>
             <th>День недели</th>
             <th>Номер пары</th>
             <th>Аудитория</th>
         </tr>
-        @foreach (var timetable in Model.Lessons)
+        @foreach (var lesson in Model.Lessons)
         {
             <tr>
-                <td>@timetable.DayOfTheWeek</td>
-                <td>@timetable.PeriodNumber</td>
-                <td>@timetable.ClassRoom</td>
+                <td>@lesson.DayOfTheWeek</td>
+                <td>@lesson.PeriodNumber</td>
+                <td>@lesson.ClassRoom</td>
             </tr>
         }
     </table>

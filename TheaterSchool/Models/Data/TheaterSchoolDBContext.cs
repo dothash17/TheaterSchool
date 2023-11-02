@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using TheaterSchool.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace TheaterSchool.Models.Data;
 
